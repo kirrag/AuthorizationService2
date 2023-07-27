@@ -27,8 +27,9 @@ public class AuthorizationService {
 		}
 
 		List<User> users = findAll();
+
 		for (User u : users) {
-			if (u.getName().equals(user.getName()) && BCrypt.checkpw(user.getPassword(), u.getPassword())) {
+			if (u.getName().equals(user.getName()) && BCrypt.checkpw(u.getPassword(), user.getPassword())) {
 				authorities =  u.getAuthorities();
 			}
 		}
