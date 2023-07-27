@@ -8,7 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ElementCollection;
 import javax.persistence.FetchType;
-import org.mindrot.jbcrypt.BCrypt;
+//import org.mindrot.jbcrypt.BCrypt;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -30,8 +30,9 @@ public class User {
 
 	public User(String name, String password, List<Authorities> authorities) {
 		this.name = name;
-		String salt = BCrypt.gensalt();
-		this.password = BCrypt.hashpw(password, salt);
+		//String salt = BCrypt.gensalt();
+		//this.password = BCrypt.hashpw(password, salt);
+		this.password = password;
 		this.authorities = authorities;
 	}
 
@@ -60,8 +61,9 @@ public class User {
 	}
 
 	public void setPassword(String password) {
-		String salt = BCrypt.gensalt();
-		this.password = BCrypt.hashpw(password, salt);
+		//String salt = BCrypt.gensalt();
+		//this.password = BCrypt.hashpw(password, salt);
+		this.password = password;
 	}
 
 	public void setAuthorities(List<Authorities> authorities) {
@@ -77,8 +79,8 @@ public class User {
 			return false;
 		User user = (User) o;
 		return Objects.equals(this.id, user.id) && Objects.equals(this.name, user.name)
-				//&& Objects.equals(this.password, user.password)
-				&& BCrypt.checkpw(this.password, user.password)
+				&& Objects.equals(this.password, user.password)
+				//&& BCrypt.checkpw(this.password, user.password)
 				&& Objects.equals(this.authorities, user.authorities);
 	}
 

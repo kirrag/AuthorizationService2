@@ -9,7 +9,7 @@ import ru.netology.authservice.exception.InvalidCredentials;
 import ru.netology.authservice.exception.UnauthorizedUser;
 import org.springframework.stereotype.Service;
 
-import org.mindrot.jbcrypt.BCrypt;
+//import org.mindrot.jbcrypt.BCrypt;
 
 @Service
 public class AuthorizationService {
@@ -29,7 +29,8 @@ public class AuthorizationService {
 		List<User> users = findAll();
 
 		for (User u : users) {
-			if (u.getName().equals(user.getName()) && BCrypt.checkpw(u.getPassword(), user.getPassword())) {
+			//if (u.getName().equals(user.getName()) && BCrypt.checkpw(u.getPassword(), user.getPassword())) {
+			if (u.getName().equals(user.getName()) && !u.getPassword().equals(user.getPassword())) {
 				authorities =  u.getAuthorities();
 			}
 		}
