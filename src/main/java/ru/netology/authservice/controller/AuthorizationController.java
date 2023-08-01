@@ -1,7 +1,6 @@
 package ru.netology.authservice.controller;
 
 import java.util.List;
-
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -9,10 +8,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-//import org.springframework.web.bind.annotation.RequestParam;
-//import org.springframework.web.bind.annotation.ResponseBody;
-import javax.validation.Valid;
-
 import ru.netology.authservice.domain.User;
 import ru.netology.authservice.service.AuthorizationService;
 import ru.netology.authservice.domain.Authorities;
@@ -29,12 +24,9 @@ public class AuthorizationController {
 
 	@GetMapping("/authorize")
 	public List<Authorities> getAuthorities(User user) {
-	//public List<Authorities> getAuthorities(@Valid User user) {
 		return service.getAuthorities(user);
 	}
 
-	// Aggregate root
-	// tag::get-aggregate-root[]
 	@GetMapping("/users")
 	public List<User> all() {
 		return service.findAll();

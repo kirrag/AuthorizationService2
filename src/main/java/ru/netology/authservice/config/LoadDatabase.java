@@ -11,6 +11,7 @@ import java.util.Arrays;
 import ru.netology.authservice.repository.UserRepository;
 import ru.netology.authservice.domain.User;
 import ru.netology.authservice.domain.Authorities;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 
 @Configuration
 public class LoadDatabase {
@@ -23,17 +24,16 @@ public class LoadDatabase {
 	private static final List<Authorities> aclrwd = Arrays.asList(Authorities.valueOf("READ"),
 			Authorities.valueOf("WRITE"), Authorities.valueOf("DELETE"));
 
-	//User ivan = new User("ivan", "qwerty123", aclr);
-	//User oleg = new User("oleg", "welcome1", aclrw);
-	//User masha = new User("masha", "Welcome1!", aclrwd);
-
 	@Bean
 	CommandLineRunner initDatabase(UserRepository repository) {
 
 		return args -> {
-			log.info("Preloading " + repository.save(new User("ivan", "qwerty123", aclr)));
-			log.info("Preloading " + repository.save(new User("oleg", "welcome1", aclrw)));
-			log.info("Preloading " + repository.save(new User("masha", "Welcome1!", aclrwd)));
+			log.info("Preloading "
+					+ repository.save(new User("ivan", BCrypt.hashpw("qwerty123", BCrypt.gensalt()), aclr)));
+			log.info("Preloading "
+					+ repository.save(new User("oleg", BCrypt.hashpw("welcome1", BCrypt.gensalt()), aclrw)));
+			log.info("Preloading "
+					+ repository.save(new User("masha", BCrypt.hashpw("Welcome1!", BCrypt.gensalt()), aclrwd)));
 		};
 	}
 }

@@ -2,19 +2,14 @@ package ru.netology.authservice.domain;
 
 import java.util.Objects;
 import java.util.List;
-
+import java.util.Collections;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ElementCollection;
 import javax.persistence.FetchType;
-//import org.mindrot.jbcrypt.BCrypt;
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 
 @Entity
-//@Valid
 public class User {
 
 	private @Id @GeneratedValue Long id;
@@ -24,14 +19,20 @@ public class User {
 	private String password;
 	@ElementCollection(fetch = FetchType.EAGER)
 	private List<Authorities> authorities;
-
+	
+	// Entity теребует чтоб обязательно был дефолтный конструктор
 	public User() {
+
+	}
+
+	public User(String name, String password) {
+		this.name = name;
+		this.password = password;
+		this.authorities = Collections.emptyList();
 	}
 
 	public User(String name, String password, List<Authorities> authorities) {
 		this.name = name;
-		//String salt = BCrypt.gensalt();
-		//this.password = BCrypt.hashpw(password, salt);
 		this.password = password;
 		this.authorities = authorities;
 	}

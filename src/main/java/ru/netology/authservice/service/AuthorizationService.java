@@ -1,5 +1,6 @@
 package ru.netology.authservice.service;
 
+import java.util.Collections;
 import java.util.List;
 import ru.netology.authservice.domain.Authorities;
 import ru.netology.authservice.repository.UserRepository;
@@ -8,8 +9,7 @@ import ru.netology.authservice.exception.UserNotFoundException;
 import ru.netology.authservice.exception.InvalidCredentials;
 import ru.netology.authservice.exception.UnauthorizedUser;
 import org.springframework.stereotype.Service;
-
-//import org.mindrot.jbcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCrypt; 
 
 @Service
 public class AuthorizationService {
@@ -21,24 +21,30 @@ public class AuthorizationService {
 	}
 
 	public List<Authorities> getAuthorities(User user) {
+		List<Authorities> userAuthorities = Collections.emptyList();
+		String hashed = "";
 
-		if (isEmpty(user.getName()) || isEmpty(user.getPassword())) {
-			throw new InvalidCredentials("User name or password is empty");
+		if (isEmpty(user.getName())) {
+			throw new InvalidCredentials("User name is empty");
+		}
+
+		if (isEmpty(user.getPassword())) {
+			throw new InvalidCredentials("Password is empty");
 		}
 
 		List<User> users = findAll();
-
 		for (User u : users) {
-			//if (u.getName().equals(user.getName()) && BCrypt.checkpw(u.getPassword(), user.getPassword())) {
-			if (u.getName().equals(user.getName()) && !u.getPassword().equals(user.getPassword())) {
-				authorities =  u.getAuthorities();
+			if (u.getName().equals(user.getName()) ) {
+				userAuthorities = u.getAuthorities();
+				hashed = u.getPassword();
 			}
 		}
 
-		if (isEmpty(user.getAuthorities())) {
-			throw new UnauthorizedUser("Unknown user " + user.getName());
+		if (isEmpty(userAuthorities) || ! BCrypt.checkpw(user.getPassword(), hashed)) {
+			throw new UnauthorizedUser("Unauthorized user " + user.getName());
 		}
-		return authorities;
+
+		return userAuthorities;
 	}
 
 	private boolean isEmpty(String str) {
